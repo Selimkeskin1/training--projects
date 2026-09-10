@@ -165,7 +165,7 @@ int main()
   for (size_t index = 0; index < numberForecast.length(); ++index )
   {
 
-    if (numberForecast[index] == '(')
+    if ( ( numberForecast[index] == '(' ) || ( numberForecast[index] == ' '  )   )
     {
       continue;
     }
