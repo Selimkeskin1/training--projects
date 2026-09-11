@@ -70,8 +70,11 @@ int main()
       std::make_tuple("milyar", 1000000000, "~"),
       std::make_tuple("milyon", 1000000, "$"),
       std::make_tuple("bin", 1000, "&"),
-      std::make_tuple("yüz", 100, "%"),
-      std::make_tuple("yüz", 100, "*")};
+//      std::make_tuple("yüz", 100, "%"),
+
+      std::make_tuple("yüz", 100, "*")
+    
+    };
 
   std::list<std::tuple<std::string, std::string, int>> digits = {
       {"sıfır", "0", 0},
@@ -127,10 +130,12 @@ int main()
       }
     }
 
-    if (std::get<2>(x) == "%")
+//    if (std::get<2>(x) == "%")
+    if( std::get<2>(x) == "&")
     {
       pos = 0;
     }
+
   }
 
   for (auto &x : digits)
@@ -172,6 +177,7 @@ int main()
     else if (numberForecast[index] == ')')
     {
 
+
       if (bufferInt1 == 0)
       {
         bufferInt1 = std::stoi(buffer);
@@ -184,13 +190,15 @@ int main()
       {
         bufferInt3 = std::stoi(buffer);
       }
-
       buffer = {};
+
+
     }
     else if (numberForecast[index] == '~')
     {
 
       calc = 0;
+      
       if ((buffer.length() != 0))
       {
         calc = std::stoi(buffer);
@@ -215,7 +223,9 @@ int main()
       bufferInt1 = 0;
       bufferInt2 = 0;
       bufferInt3 = 0;
+
     }
+
     else if (numberForecast[index] == '*')
     {
 
@@ -244,6 +254,7 @@ int main()
 
       buffer = {};
     }
+
     else if (numberForecast[index] == '$')
     {
 
@@ -273,7 +284,7 @@ int main()
       bufferInt2 = 0;
       bufferInt3 = 0;
     }
-    else if (numberForecast[index] == '&')
+    else if (numberForecast[index] == '&')   // binler
     {
 
       calc = 0;
@@ -293,6 +304,8 @@ int main()
         {
           bufferInt3 = std::stoi(buffer);
         }
+
+
       }
 
       intForecast += (bufferInt1 + bufferInt2 + bufferInt3) * 1000;
@@ -302,7 +315,9 @@ int main()
       bufferInt2 = 0;
       bufferInt3 = 0;
     }
-    else if (numberForecast[index] == '%')
+
+/*
+    else if (numberForecast[index] == '%') // yüzler 
     {
 
       calc = 0;
@@ -331,12 +346,16 @@ int main()
       bufferInt2 = 0;
       bufferInt3 = 0;
     }
+
+*/
+
     else
     {
       buffer.append(1, numberForecast[index]);
     }
   }
 
+  /*
   calc = 0;
   if ((buffer.length() != 0))
   {
@@ -355,6 +374,7 @@ int main()
       bufferInt3 = std::stoi(buffer);
     }
   }
+*/
 
   intForecast += (bufferInt1 + bufferInt2 + bufferInt3);
   std::cout << intForecast << std::endl;
