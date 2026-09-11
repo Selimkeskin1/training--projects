@@ -70,11 +70,11 @@ int main()
       std::make_tuple("milyar", 1000000000, "~"),
       std::make_tuple("milyon", 1000000, "$"),
       std::make_tuple("bin", 1000, "&"),
-//      std::make_tuple("yüz", 100, "%"),
+      //      std::make_tuple("yüz", 100, "%"),
 
       std::make_tuple("yüz", 100, "*")
-    
-    };
+
+  };
 
   std::list<std::tuple<std::string, std::string, int>> digits = {
       {"sıfır", "0", 0},
@@ -130,12 +130,11 @@ int main()
       }
     }
 
-//    if (std::get<2>(x) == "%")
-    if( std::get<2>(x) == "&")
+    //    if (std::get<2>(x) == "%")
+    if (std::get<2>(x) == "&")
     {
       pos = 0;
     }
-
   }
 
   for (auto &x : digits)
@@ -164,20 +163,39 @@ int main()
   size_t bufferInt2 = 0;
   size_t bufferInt3 = 0;
 
+  // note: explicitly specifying this returns a double
+  auto getAvailableBuffer{[bufferInt1, bufferInt2, bufferInt3](size_t &x, size_t &y, size_t &z) -> size_t *
+                          {
+                            if (x == 0)
+                              return &x;
+                            else if (y == 0)
+                              return &y;
+                            else if (z == 0)
+                              return &z;
+                          }
+
+  };
+
+  // * ( getAvailableBuffer (bufferInt1, bufferInt2, bufferInt3 ) )  = 10;
+  // * ( getAvailableBuffer (bufferInt1, bufferInt2, bufferInt3 ) )  = 20;
+  // * ( getAvailableBuffer (bufferInt1, bufferInt3, bufferInt3 ) )  = 30;
+
   size_t intForecast = 0;
   size_t calc = 0;
 
-  for (size_t index = 0; index < numberForecast.length(); ++index )
+  for (size_t index = 0; index < numberForecast.length(); ++index)
   {
 
-    if ( ( numberForecast[index] == '(' ) || ( numberForecast[index] == ' '  )   )
+    if ((numberForecast[index] == '(') || (numberForecast[index] == ' '))
     {
       continue;
     }
     else if (numberForecast[index] == ')')
     {
 
+      *(getAvailableBuffer(bufferInt1, bufferInt2, bufferInt3)) = std::stoi(buffer);
 
+      /*
       if (bufferInt1 == 0)
       {
         bufferInt1 = std::stoi(buffer);
@@ -190,32 +208,36 @@ int main()
       {
         bufferInt3 = std::stoi(buffer);
       }
+*/
+
       buffer = {};
-
-
     }
     else if (numberForecast[index] == '~')
     {
 
-      calc = 0;
-      
       if ((buffer.length() != 0))
       {
-        calc = std::stoi(buffer);
 
-        if (bufferInt1 == 0)
-        {
-          bufferInt1 = std::stoi(buffer);
-        }
-        else if (bufferInt2 == 0)
-        {
-          bufferInt2 = std::stoi(buffer);
-        }
-        else if (bufferInt3 == 0)
-        {
-          bufferInt3 = std::stoi(buffer);
-        }
+        /*
+                if (bufferInt1 == 0)
+                {
+                  bufferInt1 = std::stoi(buffer);
+                }
+                else if (bufferInt2 == 0)
+                {
+                  bufferInt2 = std::stoi(buffer);
+                }
+                else if (bufferInt3 == 0)
+                {
+                  bufferInt3 = std::stoi(buffer);
+                }
+        */
+
+        *(getAvailableBuffer(bufferInt1, bufferInt2, bufferInt3)) = std::stoi(buffer);
       }
+
+      if ((bufferInt1 == 0) && (bufferInt2 == 0) && (bufferInt3 == 0))
+        bufferInt1 = 1;
 
       intForecast += (bufferInt1 + bufferInt2 + bufferInt3) * 1000000000;
       buffer = {};
@@ -223,13 +245,13 @@ int main()
       bufferInt1 = 0;
       bufferInt2 = 0;
       bufferInt3 = 0;
-
     }
 
     else if (numberForecast[index] == '*')
     {
 
       size_t hundreds = 0;
+
       if ((buffer.length() == 0))
       {
         hundreds = 100;
@@ -239,43 +261,50 @@ int main()
         hundreds = 100 * std::stoi(buffer);
       }
 
-      if (bufferInt1 == 0)
-      {
-        bufferInt1 = hundreds;
-      }
-      else if (bufferInt2 == 0)
-      {
-        bufferInt2 = hundreds;
-      }
-      else if (bufferInt3 == 0)
-      {
-        bufferInt3 = hundreds;
-      }
+      /*
+            if (bufferInt1 == 0)
+            {
+              bufferInt1 = hundreds;
+            }
+            else if (bufferInt2 == 0)
+            {
+              bufferInt2 = hundreds;
+            }
+            else if (bufferInt3 == 0)
+            {
+              bufferInt3 = hundreds;
+            }
+      */
+      *(getAvailableBuffer(bufferInt1, bufferInt2, bufferInt3)) = hundreds;
 
       buffer = {};
     }
 
-    else if (numberForecast[index] == '$')
+    else if (numberForecast[index] == '$') // milyonlar
     {
 
-      calc = 0;
       if ((buffer.length() != 0))
       {
-        calc = std::stoi(buffer);
 
-        if (bufferInt1 == 0)
-        {
-          bufferInt1 = std::stoi(buffer);
-        }
-        else if (bufferInt2 == 0)
-        {
-          bufferInt2 = std::stoi(buffer);
-        }
-        else if (bufferInt3 == 0)
-        {
-          bufferInt3 = std::stoi(buffer);
-        }
+        *(getAvailableBuffer(bufferInt1, bufferInt2, bufferInt3)) = std::stoi(buffer);
+        /*
+                if (bufferInt1 == 0)
+                {
+                  bufferInt1 = std::stoi(buffer);
+                }
+                else if (bufferInt2 == 0)
+                {
+                  bufferInt2 = std::stoi(buffer);
+                }
+                else if (bufferInt3 == 0)
+                {
+                  bufferInt3 = std::stoi(buffer);
+                }
+        */
       }
+
+      if ((bufferInt1 == 0) && (bufferInt2 == 0) && (bufferInt3 == 0))
+        bufferInt1 = 1;
 
       intForecast += (bufferInt1 + bufferInt2 + bufferInt3) * 1000000;
       buffer = {};
@@ -284,29 +313,31 @@ int main()
       bufferInt2 = 0;
       bufferInt3 = 0;
     }
-    else if (numberForecast[index] == '&')   // binler
+    else if (numberForecast[index] == '&') // binler
     {
 
-      calc = 0;
       if ((buffer.length() != 0))
       {
-        calc = std::stoi(buffer);
+        /*
+                if (bufferInt1 == 0)
+                {
+                  bufferInt1 = std::stoi(buffer);
+                }
+                else if (bufferInt2 == 0)
+                {
+                  bufferInt2 = std::stoi(buffer);
+                }
+                else if (bufferInt3 == 0)
+                {
+                  bufferInt3 = std::stoi(buffer);
+                }
+        */
 
-        if (bufferInt1 == 0)
-        {
-          bufferInt1 = std::stoi(buffer);
-        }
-        else if (bufferInt2 == 0)
-        {
-          bufferInt2 = std::stoi(buffer);
-        }
-        else if (bufferInt3 == 0)
-        {
-          bufferInt3 = std::stoi(buffer);
-        }
-
-
+        *(getAvailableBuffer(bufferInt1, bufferInt2, bufferInt3)) = std::stoi(buffer);
       }
+
+      if ((bufferInt1 == 0) && (bufferInt2 == 0) && (bufferInt3 == 0))
+        bufferInt1 = 1;
 
       intForecast += (bufferInt1 + bufferInt2 + bufferInt3) * 1000;
       buffer = {};
@@ -316,38 +347,38 @@ int main()
       bufferInt3 = 0;
     }
 
-/*
-    else if (numberForecast[index] == '%') // yüzler 
-    {
-
-      calc = 0;
-      if ((buffer.length() != 0))
-      {
-        calc = std::stoi(buffer);
-
-        if (bufferInt1 == 0)
+    /*
+        else if (numberForecast[index] == '%') // yüzler
         {
-          bufferInt1 = std::stoi(buffer);
-        }
-        else if (bufferInt2 == 0)
-        {
-          bufferInt2 = std::stoi(buffer);
-        }
-        else if (bufferInt3 == 0)
-        {
-          bufferInt3 = std::stoi(buffer);
-        }
-      }
 
-      intForecast += (bufferInt1 + bufferInt2 + bufferInt3) * 100;
-      buffer = {};
+          calc = 0;
+          if ((buffer.length() != 0))
+          {
+            calc = std::stoi(buffer);
 
-      bufferInt1 = 0;
-      bufferInt2 = 0;
-      bufferInt3 = 0;
-    }
+            if (bufferInt1 == 0)
+            {
+              bufferInt1 = std::stoi(buffer);
+            }
+            else if (bufferInt2 == 0)
+            {
+              bufferInt2 = std::stoi(buffer);
+            }
+            else if (bufferInt3 == 0)
+            {
+              bufferInt3 = std::stoi(buffer);
+            }
+          }
 
-*/
+          intForecast += (bufferInt1 + bufferInt2 + bufferInt3) * 100;
+          buffer = {};
+
+          bufferInt1 = 0;
+          bufferInt2 = 0;
+          bufferInt3 = 0;
+        }
+
+    */
 
     else
     {
@@ -375,6 +406,11 @@ int main()
     }
   }
 */
+
+  if ((buffer.length() != 0))
+  {
+    *(getAvailableBuffer(bufferInt1, bufferInt2, bufferInt3)) = std::stoi(buffer);
+  }
 
   intForecast += (bufferInt1 + bufferInt2 + bufferInt3);
   std::cout << intForecast << std::endl;
